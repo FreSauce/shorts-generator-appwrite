@@ -2,6 +2,12 @@ import ytdl from "ytdl-core"
 
 import { getStaticFile, throwIfMissing } from "./utils.js"
 
+ytdl
+  .getBasicInfo("https://www.youtube.com/watch?v=vrOjy-v5JgQ")
+  .then((info) => {
+    console.log(info)
+  })
+
 export default async (context) => {
   const { req, res } = context
   throwIfMissing(process.env, ["RAPIDAPI_KEY"])
@@ -20,7 +26,7 @@ export default async (context) => {
 
   try {
     context.log(req.body.videourl)
-    let info = await ytdl.getInfo(req.body.videourl)
+    let info = await ytdl.getBasicInfo(req.body.videourl)
     context.log(info)
     return res.json({ ok: true, data: info }, 200)
   } catch (err) {
