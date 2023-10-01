@@ -19,6 +19,7 @@ export default async (context) => {
   }
 
   try {
+    context.log(req.body.videourl)
     let info = await ytdl.getInfo(req.body.videourl)
     context.log(info)
     return res.json({ ok: true, data: info }, 200)
