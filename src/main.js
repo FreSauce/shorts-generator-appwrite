@@ -10,7 +10,7 @@ ytdl
 
 export default async (context) => {
   const { req, res } = context
-  throwIfMissing(process.env, ["RAPIDAPI_KEY"])
+  // throwIfMissing(process.env, ["RAPIDAPI_KEY"])
 
   if (req.method === "GET") {
     return res.send(getStaticFile("index.html"), 200, {
@@ -18,11 +18,11 @@ export default async (context) => {
     })
   }
 
-  try {
-    throwIfMissing(req.body, ["videourl"])
-  } catch (err) {
-    return res.json({ ok: false, error: err.message }, 400)
-  }
+  // try {
+  //   throwIfMissing(req.body, ["videourl"])
+  // } catch (err) {
+  //   return res.json({ ok: false, error: err.message }, 400)
+  // }
 
   try {
     context.log(req.body.videourl)
