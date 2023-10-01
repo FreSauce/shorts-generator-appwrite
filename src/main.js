@@ -1,13 +1,23 @@
 import fs from "fs"
+import youtubedl from "youtube-dl-exec"
 import ytdl from "ytdl-core"
 
 import { getStaticFile, throwIfMissing } from "./utils.js"
 
-ytdl
-  .getBasicInfo("https://www.youtube.com/watch?v=vrOjy-v5JgQ")
-  .then((info) => {
-    console.log(info)
-  })
+// ytdl("https://www.youtube.com/watch?v=AUCRA3k7w2Q")
+//   .pipe(fs.createWriteStream("video.mp4"))
+//   .addListener("finish", () => {
+//     console.log("finished")
+//   })
+
+// let out = await youtubedl("https://www.youtube.com/watch?v=6xKWiCMKKJg", {
+//   dumpSingleJson: true,
+//   noCheckCertificates: true,
+//   noWarnings: true,
+//   preferFreeFormats: true,
+//   addHeader: ["referer:youtube.com", "user-agent:googlebot"]
+// })
+// console.log(out)
 
 export default async (context) => {
   const { req, res } = context
@@ -28,17 +38,20 @@ export default async (context) => {
   try {
     context.log(req.body.videourl)
     // let info = await ytdl.getBasicInfo(req.body.videourl)
-    ytdl(req.body.videourl)
-      .pipe(fs.createWriteStream("video.mp4"))
-      .addListener("finish", () => {
-        context.log("finished")
-        return res.json({ ok: true, data: "finished" }, 200)
-      })
-    let info = "hehe"
-    context.log(info)
+
+    let out = await youtubedl("https://www.youtube.com/watch?v=6xKWiCMKKJg", {
+      dumpSingleJson: true,
+      noCheckCertificates: true,
+      noWarnings: true,
+      preferFreeFormats: true,
+      addHeader: ["referer:youtube.com", "user-agent:googlebot"]
+    })
+    // let info = "hehe"
+    // context.log(info)
+    context.log(out)
     let wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-    await wait(10000)
-    return res.json({ ok: true, data: info }, 200)
+    // await wait(10000)
+    return res.json({ ok: false, error: "Failed to download video" }, 200)
   } catch (err) {
     context.log(err)
     return res.json({ ok: false, error: err.message }, 400)
