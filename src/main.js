@@ -1,3 +1,5 @@
+import ytdl from "ytdl-core"
+
 import { getStaticFile, throwIfMissing } from "./utils.js"
 
 export default async ({ req, res }) => {
@@ -10,29 +12,20 @@ export default async ({ req, res }) => {
   }
 
   try {
-    throwIfMissing(req.body, ["videoid"])
+    throwIfMissing(req.body, ["videourl"])
   } catch (err) {
     return res.json({ ok: false, error: err.message }, 400)
   }
 
-  const youtubedl = require("youtube-dl-exec")
-
-  youtubedl("https://www.youtube.com/watch?v=6xKWiCMKKJg", {
-    dumpSingleJson: true,
-    noCheckCertificates: true,
-    noWarnings: true,
-    preferFreeFormats: true,
-    addHeader: ["referer:youtube.com", "user-agent:googlebot"]
-  })
-    .then((output) => {
-      console.log(output)
-      return res.json({ ok: true, completion: output.toString() }, 200)
+  ytdl
+    .getInfo(req.body.videourl)
+    .then((info) => {
+      console.log(info)
+      return res.json({ ok: true, data: info }, 200)
     })
     .catch((err) => {
-      console.log(err)
-      return res.json({ ok: false, error: err.toString() }, 500)
+      return res.json({ ok: false, error: err.message }, 400)
     })
-
   // const openai = new OpenAIApi(
   //   new Configuration({
   //     apiKey: process.env.OPENAI_API_KEY

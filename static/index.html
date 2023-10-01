@@ -8,10 +8,10 @@
   <title>Youtube Shorts Generator </title>
 
   <script>
-    async function onSubmit(videoid) {
+    async function onSubmit(videourl) {
       const response = await fetch('/', {
         method: 'POST',
-        body: JSON.stringify({ videoid }),
+        body: JSON.stringify({ videourl }),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -23,7 +23,7 @@
         alert(json.error);
       }
 
-      return json.completion;
+      return json.data;
     }
   </script>
 
