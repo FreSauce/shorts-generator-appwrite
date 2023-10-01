@@ -32,9 +32,7 @@ export default async (context) => {
         videoId: videoid
       },
       headers: {
-        "X-RapidAPI-Key":
-          process.env.RAPIDAPI_KEY ||
-          "29d59d18b1msh9cc3ad5deb22decp1992c6jsnee8301ad5d8c",
+        "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
         "X-RapidAPI-Host": "get-youtube-video-revision-graph.p.rapidapi.com"
       }
     }
