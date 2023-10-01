@@ -17,15 +17,14 @@ export default async ({ req, res }) => {
     return res.json({ ok: false, error: err.message }, 400)
   }
 
-  ytdl
-    .getInfo(req.body.videourl)
-    .then((info) => {
-      console.log(info)
-      return res.json({ ok: true, data: info }, 200)
-    })
-    .catch((err) => {
-      return res.json({ ok: false, error: err.message }, 400)
-    })
+  try {
+    let info = await ytdl.getInfo(req.body.videourl)
+    console.log(info)
+    return res.json({ ok: true, data: info }, 200)
+  } catch (err) {
+    console.log(err)
+    return res.json({ ok: false, error: err.message }, 400)
+  }
   // const openai = new OpenAIApi(
   //   new Configuration({
   //     apiKey: process.env.OPENAI_API_KEY
