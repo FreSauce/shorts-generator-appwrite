@@ -2,7 +2,8 @@ import ytdl from "ytdl-core"
 
 import { getStaticFile, throwIfMissing } from "./utils.js"
 
-export default async ({ req, res }) => {
+export default async (context) => {
+  const { req, res } = context
   throwIfMissing(process.env, ["RAPIDAPI_KEY"])
 
   if (req.method === "GET") {
@@ -19,10 +20,10 @@ export default async ({ req, res }) => {
 
   try {
     let info = await ytdl.getInfo(req.body.videourl)
-    console.log(info)
+    context.log(info)
     return res.json({ ok: true, data: info }, 200)
   } catch (err) {
-    console.log(err)
+    context.log(err)
     return res.json({ ok: false, error: err.message }, 400)
   }
   // const openai = new OpenAIApi(
