@@ -1,3 +1,4 @@
+import fs from "fs"
 import ytdl from "ytdl-core"
 
 import { getStaticFile, throwIfMissing } from "./utils.js"
@@ -27,10 +28,15 @@ export default async (context) => {
   try {
     context.log(req.body.videourl)
     // let info = await ytdl.getBasicInfo(req.body.videourl)
-    ytdl(req.body.videourl, { filter: "audioonly" }).pipe(context.log)
+    ytdl(req.body.videourl)
+      .pipe(fs.createWriteStream("video.mp4"))
+      .addListener("finish", () => {
+        context.log("finished")
+        return res.json({ ok: true, data: "finished" }, 200)
+      })
     let info = "hehe"
     context.log(info)
-    return res.json({ ok: true, data: info }, 200)
+    // return res.json({ ok: true, data: info }, 200)
   } catch (err) {
     context.log(err)
     return res.json({ ok: false, error: err.message }, 400)
