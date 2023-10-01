@@ -36,7 +36,9 @@ export default async (context) => {
       })
     let info = "hehe"
     context.log(info)
-    // return res.json({ ok: true, data: info }, 200)
+    let wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    await wait(10000)
+    return res.json({ ok: true, data: info }, 200)
   } catch (err) {
     context.log(err)
     return res.json({ ok: false, error: err.message }, 400)
